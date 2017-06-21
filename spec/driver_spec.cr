@@ -1,39 +1,7 @@
 require "./spec_helper"
 
-def sql(s : String)
-  "#{s.inspect}"
-end
-
-def sql(s : Bool)
-  "#{s ? 1 : 0}"
-end
-
-def sql(s)
-  "#{s}"
-end
-
-def sqlite_type_for(v)
-  case v
-  when String            ; "text"
-  when Bool, Int32, Int64; "int"
-  when Float32, Float64  ; "float"
-  when Time              ; "text"
-  else
-    raise "not implemented for #{typeof(v)}"
-  end
-end
-
-def assert_single_read(rs, value_type, value)
-  rs.move_next.should be_true
-  rs.read(value_type).should eq(value)
-  rs.move_next.should be_false
-end
-
 def assert_filename(uri, filename)
   SQLite3::Connection.filename(URI.parse(uri)).should eq(filename)
-end
-
-class NotSupportedType
 end
 
 describe Driver do
